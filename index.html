@@ -40,8 +40,8 @@ max-width:1200px;
 
 .province{
 position:absolute;
-width:20px;
-height:20px;
+width:18px;
+height:18px;
 background:red;
 border-radius:50%;
 cursor:pointer;
@@ -66,7 +66,7 @@ text-align:left;
 
 <div id="menu">
 
-<h1>Shirokenz World Strategy</h1>
+<h1>Shirokenz World</h1>
 
 <button onclick="startGame()">Start Game</button>
 <button>Editor</button>
@@ -79,34 +79,18 @@ text-align:left;
 
 <img src="map.png" class="map">
 
-<!-- Provinsi -->
-
-<div class="province"
-style="left:420px; top:200px;"
-onclick="openProvince(0)">
-</div>
-
-<div class="province"
-style="left:760px; top:260px;"
-onclick="openProvince(1)">
-</div>
-
-<div class="province"
-style="left:980px; top:240px;"
-onclick="openProvince(2)">
-</div>
+<div id="provincesLayer"></div>
 
 </div>
+
 
 <div id="panel">
 
 <h3 id="p_name"></h3>
-
 <p id="p_country"></p>
-<p id="p_population"></p>
-<p id="p_economy"></p>
-<p id="p_happiness"></p>
-<p id="p_army"></p>
+<p id="p_pop"></p>
+<p id="p_eco"></p>
+<p id="p_happy"></p>
 
 </div>
 
@@ -117,6 +101,8 @@ function startGame(){
 
 document.getElementById("menu").style.display="none"
 document.getElementById("game").style.display="block"
+
+createProvinces()
 
 }
 
@@ -129,7 +115,8 @@ country:"Great Shirokenz Family",
 population:30000000,
 economy:789028,
 happiness:95,
-army:5000
+x:500,
+y:250
 },
 
 {
@@ -138,7 +125,8 @@ country:"Great Shinkei",
 population:21000000,
 economy:520000,
 happiness:90,
-army:4200
+x:700,
+y:320
 },
 
 {
@@ -147,10 +135,33 @@ country:"Reivhian Republic",
 population:22000000,
 economy:610000,
 happiness:88,
-army:4500
+x:900,
+y:260
 }
 
 ]
+
+
+function createProvinces(){
+
+let layer = document.getElementById("provincesLayer")
+
+provinces.forEach((p,i)=>{
+
+let div = document.createElement("div")
+
+div.className="province"
+
+div.style.left = p.x + "px"
+div.style.top = p.y + "px"
+
+div.onclick = ()=>openProvince(i)
+
+layer.appendChild(div)
+
+})
+
+}
 
 
 function openProvince(id){
@@ -159,23 +170,11 @@ let p = provinces[id]
 
 document.getElementById("panel").style.display="block"
 
-document.getElementById("p_name").innerText =
-"Provinsi: " + p.name
-
-document.getElementById("p_country").innerText =
-"Negara: " + p.country
-
-document.getElementById("p_population").innerText =
-"Populasi: " + p.population
-
-document.getElementById("p_economy").innerText =
-"Ekonomi: " + p.economy
-
-document.getElementById("p_happiness").innerText =
-"Kebahagiaan: " + p.happiness
-
-document.getElementById("p_army").innerText =
-"Tentara: " + p.army
+document.getElementById("p_name").innerText = "Provinsi: " + p.name
+document.getElementById("p_country").innerText = "Negara: " + p.country
+document.getElementById("p_pop").innerText = "Populasi: " + p.population
+document.getElementById("p_eco").innerText = "Ekonomi: " + p.economy
+document.getElementById("p_happy").innerText = "Kebahagiaan: " + p.happiness
 
 }
 
