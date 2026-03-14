@@ -4,110 +4,80 @@
 <title>Shirokenz World</title>
 
 <style>
-
 body{
 margin:0;
-background:black;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
 font-family:Arial;
-}
-
-.game{
-width:1280px;
-height:720px;
-background:#0b1a2a;
-position:relative;
-overflow:hidden;
+background:#071a2b;
 color:white;
 text-align:center;
 }
 
-.map{
-position:absolute;
-width:100%;
-height:100%;
-opacity:0.35;
-}
-
-h1{
-position:relative;
-font-size:60px;
-margin-top:60px;
-text-shadow:3px 3px 6px black;
-}
-
 .menu{
-position:relative;
-margin-top:80px;
+margin-top:120px;
 }
 
 button{
-width:350px;
-height:65px;
-margin:12px;
-font-size:26px;
+display:block;
+margin:15px auto;
+width:200px;
+padding:12px;
 background:black;
-color:#9fe3ff;
+color:white;
 border:none;
-border-radius:12px;
-cursor:pointer;
+border-radius:8px;
+font-size:16px;
 }
 
-button:hover{
-background:#222;
+#game{
+display:none;
 }
 
+.map{
+width:90%;
+max-width:900px;
+margin:auto;
+margin-top:40px;
+}
 </style>
+
 </head>
 
 <body>
 
-<div class="game">
-
-<!-- Peta dibuat langsung dengan SVG -->
-<svg class="map" viewBox="0 0 1000 600">
-<rect width="1000" height="600" fill="#1c3d5a"/>
-<ellipse cx="200" cy="200" rx="180" ry="120" fill="#4a7ba7"/>
-<ellipse cx="450" cy="320" rx="220" ry="150" fill="#5d8fbf"/>
-<ellipse cx="750" cy="220" rx="200" ry="130" fill="#4a7ba7"/>
-<ellipse cx="650" cy="450" rx="160" ry="100" fill="#5d8fbf"/>
-</svg>
-
+<div id="menu" class="menu">
 <h1>Shirokenz World</h1>
 
-<div class="menu">
 <button onclick="startGame()">Games</button>
-<button onclick="openEditor()">Editor</button>
-<button onclick="openSettings()">Settings</button>
-<button onclick="openTutorial()">Tutorial</button>
-<button onclick="exitGame()">Exit Game</button>
+<button>Editor</button>
+<button>Settings</button>
+<button>Tutorial</button>
+<button>Exit Game</button>
 </div>
 
+
+<div id="game">
+
+<h2>World Map</h2>
+
+<img class="map" src="map.png">
+
+<br><br>
+
+<button onclick="backMenu()">Back to Menu</button>
+
 </div>
+
 
 <script>
 
 function startGame(){
-alert("Starting Shirokenz World...");
+document.getElementById("menu").style.display="none";
+document.getElementById("game").style.display="block";
 }
 
-function openEditor(){
-alert("World Editor opened.");
-}
-
-function openSettings(){
-alert("Settings menu.");
-}
-
-function openTutorial(){
-alert("Tutorial opened.");
-}
-
-function exitGame(){
-alert("Thanks for playing Shirokenz World!");
+function backMenu(){
+document.getElementById("game").style.display="none";
+document.getElementById("menu").style.display="block";
 }
 
 </script>
