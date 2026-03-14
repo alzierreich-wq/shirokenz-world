@@ -4,66 +4,109 @@
 <title>Shirokenz World</title>
 
 <style>
+
 body{
 margin:0;
-font-family:Arial;
 background:#071a2b;
 color:white;
+font-family:Arial;
 text-align:center;
 }
 
-.menu{
+#menu{
 margin-top:120px;
 }
 
 button{
 display:block;
-margin:15px auto;
+margin:10px auto;
 width:200px;
-padding:12px;
+padding:10px;
 background:black;
 color:white;
 border:none;
 border-radius:8px;
-font-size:16px;
 }
 
 #game{
 display:none;
+position:relative;
 }
 
 .map{
-width:90%;
-max-width:900px;
-margin:auto;
-margin-top:40px;
+width:100%;
+max-width:1200px;
 }
-</style>
 
+.province{
+position:absolute;
+width:20px;
+height:20px;
+background:red;
+border-radius:50%;
+cursor:pointer;
+}
+
+#panel{
+position:fixed;
+right:20px;
+top:100px;
+background:#111;
+padding:15px;
+border-radius:10px;
+display:none;
+width:220px;
+text-align:left;
+}
+
+</style>
 </head>
 
 <body>
 
-<div id="menu" class="menu">
-<h1>Shirokenz World</h1>
+<div id="menu">
 
-<button onclick="startGame()">Games</button>
+<h1>Shirokenz World Strategy</h1>
+
+<button onclick="startGame()">Start Game</button>
 <button>Editor</button>
 <button>Settings</button>
 <button>Tutorial</button>
-<button>Exit Game</button>
-</div>
 
+</div>
 
 <div id="game">
 
-<h2>World Map</h2>
+<img src="map.png" class="map">
 
-<img class="map" src="map.png">
+<!-- Provinsi -->
 
-<br><br>
+<div class="province"
+style="left:420px; top:200px;"
+onclick="openProvince(0)">
+</div>
 
-<button onclick="backMenu()">Back to Menu</button>
+<div class="province"
+style="left:760px; top:260px;"
+onclick="openProvince(1)">
+</div>
+
+<div class="province"
+style="left:980px; top:240px;"
+onclick="openProvince(2)">
+</div>
+
+</div>
+
+<div id="panel">
+
+<h3 id="p_name"></h3>
+
+<p id="p_country"></p>
+<p id="p_population"></p>
+<p id="p_economy"></p>
+<p id="p_happiness"></p>
+<p id="p_army"></p>
 
 </div>
 
@@ -71,13 +114,69 @@ margin-top:40px;
 <script>
 
 function startGame(){
-document.getElementById("menu").style.display="none";
-document.getElementById("game").style.display="block";
+
+document.getElementById("menu").style.display="none"
+document.getElementById("game").style.display="block"
+
 }
 
-function backMenu(){
-document.getElementById("game").style.display="none";
-document.getElementById("menu").style.display="block";
+
+let provinces = [
+
+{
+name:"Shirokane",
+country:"Great Shirokenz Family",
+population:30000000,
+economy:789028,
+happiness:95,
+army:5000
+},
+
+{
+name:"Tolova",
+country:"Great Shinkei",
+population:21000000,
+economy:520000,
+happiness:90,
+army:4200
+},
+
+{
+name:"Rvn",
+country:"Reivhian Republic",
+population:22000000,
+economy:610000,
+happiness:88,
+army:4500
+}
+
+]
+
+
+function openProvince(id){
+
+let p = provinces[id]
+
+document.getElementById("panel").style.display="block"
+
+document.getElementById("p_name").innerText =
+"Provinsi: " + p.name
+
+document.getElementById("p_country").innerText =
+"Negara: " + p.country
+
+document.getElementById("p_population").innerText =
+"Populasi: " + p.population
+
+document.getElementById("p_economy").innerText =
+"Ekonomi: " + p.economy
+
+document.getElementById("p_happiness").innerText =
+"Kebahagiaan: " + p.happiness
+
+document.getElementById("p_army").innerText =
+"Tentara: " + p.army
+
 }
 
 </script>
