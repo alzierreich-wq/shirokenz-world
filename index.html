@@ -1,184 +1,139 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Shirokenz World</title>
-
-<style>
+<!DOCTYPE html><html><head>
+<title>Shirokenz World Strategy</title><style>
 
 body{
 margin:0;
-background:#071a2b;
+background:black;
 color:white;
 font-family:Arial;
 text-align:center;
 }
 
-#menu{
-margin-top:120px;
-}
-
-button{
-display:block;
-margin:10px auto;
-width:200px;
-padding:10px;
-background:black;
-color:white;
-border:none;
-border-radius:8px;
-}
-
-#game{
-display:none;
+#gameMap{
 position:relative;
-}
-
-.map{
-width:100%;
-max-width:1200px;
+width:1280px;
+height:720px;
+margin:auto;
+background:url("map.png");
+background-size:cover;
 }
 
 .province{
 position:absolute;
-width:18px;
-height:18px;
-background:red;
+width:20px;
+height:20px;
+background:rgba(255,255,255,0.2);
 border-radius:50%;
 cursor:pointer;
 }
 
-#panel{
-position:fixed;
-right:20px;
-top:100px;
-background:#111;
-padding:15px;
-border-radius:10px;
-display:none;
-width:220px;
-text-align:left;
+</style></head><body><h1>Shirokenz World Strategy Game</h1><button onclick="startGame()">Start Game</button>
+
+<div id="gameMap"></div><script>
+
+////////////////////////////////////////////////
+// WORLD ENGINE
+////////////////////////////////////////////////
+
+const WORLD={
+provinces:[],
+countries:[]
+};
+
+class Province{
+
+constructor(id,x,y){
+
+this.id=id;
+this.x=x;
+this.y=y;
+
+this.population=500000;
+this.economy=1000;
+this.loyalty=80;
+
 }
 
-</style>
-</head>
+}
 
-<body>
+class Country{
 
-<div id="menu">
+constructor(id,name){
 
-<h1>Shirokenz World</h1>
+this.id=id;
+this.name=name;
+this.money=1000000;
 
-<button onclick="startGame()">Start Game</button>
-<button>Editor</button>
-<button>Settings</button>
-<button>Tutorial</button>
+}
 
-</div>
+}
 
-<div id="game">
+////////////////////////////////////////////////
+// GENERATE PROVINCES
+////////////////////////////////////////////////
 
-<img src="map.png" class="map">
+function generateProvinces(){
 
-<div id="provincesLayer"></div>
+let map=document.getElementById("gameMap");
 
-</div>
+for(let i=0;i<200;i++){
 
+let x=Math.random()*1200;
+let y=Math.random()*650;
 
-<div id="panel">
+let province=new Province(i,x,y);
 
-<h3 id="p_name"></h3>
-<p id="p_country"></p>
-<p id="p_pop"></p>
-<p id="p_eco"></p>
-<p id="p_happy"></p>
+WORLD.provinces.push(province);
 
-</div>
+let div=document.createElement("div");
 
+div.className="province";
+div.style.left=x+"px";
+div.style.top=y+"px";
 
-<script>
+div.onclick=function(){
+
+alert("Province ID: "+province.id+
+"\nPopulation: "+province.population+
+"\nEconomy: "+province.economy);
+
+};
+
+map.appendChild(div);
+
+}
+
+}
+
+////////////////////////////////////////////////
+// WORLD UPDATE
+////////////////////////////////////////////////
+
+function worldUpdate(){
+
+WORLD.provinces.forEach(p=>{
+
+p.population+=p.population*0.002;
+
+});
+
+}
+
+////////////////////////////////////////////////
+// START GAME
+////////////////////////////////////////////////
 
 function startGame(){
 
-document.getElementById("menu").style.display="none"
-document.getElementById("game").style.display="block"
+generateProvinces();
 
-createProvinces()
+let country=new Country(0,"Great Shirokenz Family");
 
-}
+WORLD.countries.push(country);
 
-
-let provinces = [
-
-{
-name:"Shirokane",
-country:"Great Shirokenz Family",
-population:30000000,
-economy:789028,
-happiness:95,
-x:500,
-y:250
-},
-
-{
-name:"Tolova",
-country:"Great Shinkei",
-population:21000000,
-economy:520000,
-happiness:90,
-x:700,
-y:320
-},
-
-{
-name:"Rvn",
-country:"Reivhian Republic",
-population:22000000,
-economy:610000,
-happiness:88,
-x:900,
-y:260
-}
-
-]
-
-
-function createProvinces(){
-
-let layer = document.getElementById("provincesLayer")
-
-provinces.forEach((p,i)=>{
-
-let div = document.createElement("div")
-
-div.className="province"
-
-div.style.left = p.x + "px"
-div.style.top = p.y + "px"
-
-div.onclick = ()=>openProvince(i)
-
-layer.appendChild(div)
-
-})
+setInterval(worldUpdate,2000);
 
 }
 
-
-function openProvince(id){
-
-let p = provinces[id]
-
-document.getElementById("panel").style.display="block"
-
-document.getElementById("p_name").innerText = "Provinsi: " + p.name
-document.getElementById("p_country").innerText = "Negara: " + p.country
-document.getElementById("p_pop").innerText = "Populasi: " + p.population
-document.getElementById("p_eco").innerText = "Ekonomi: " + p.economy
-document.getElementById("p_happy").innerText = "Kebahagiaan: " + p.happiness
-
-}
-
-</script>
-
-</body>
+</script></body>
 </html>
