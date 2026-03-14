@@ -2,21 +2,103 @@
 <html>
 <head>
 <title>Shirokenz World</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+font-family:Arial;
+}
+
+.game{
+width:1280px;
+height:720px;
+background-image:url("https://i.imgur.com/8QfQK6H.jpg");
+background-size:cover;
+background-position:center;
+text-align:center;
+color:white;
+}
+
+h1{
+font-size:60px;
+margin-top:60px;
+text-shadow:3px 3px 6px black;
+}
+
+.menu{
+margin-top:80px;
+}
+
+button{
+width:350px;
+height:65px;
+margin:12px;
+font-size:26px;
+background:black;
+color:#9fe3ff;
+border:none;
+border-radius:12px;
+cursor:pointer;
+}
+
+button:hover{
+background:#222;
+}
+
+</style>
 </head>
 
 <body>
 
-<h1>Shirokenz World Strategy Game</h1>
-<p>Welcome to the world of Shirokenz.</p>
+<div class="game">
 
-<button onclick="startGame()">Start Game</button>
+<h1>Shirokenz World</h1>
+
+<div class="menu">
+
+<button onclick="startGame()">Games</button>
+
+<button onclick="openEditor()">Editor</button>
+
+<button onclick="openSettings()">Settings</button>
+
+<button onclick="openTutorial()">Tutorial</button>
+
+<button onclick="exitGame()">Exit Game</button>
+
+</div>
+
+</div>
 
 <script>
-function startGame() {
-    alert("Welcome to Shirokenz World!");
+
+function startGame(){
+alert("Starting Shirokenz World...");
 }
+
+function openEditor(){
+alert("World Editor opened.");
+}
+
+function openSettings(){
+alert("Settings menu.");
+}
+
+function openTutorial(){
+alert("Tutorial opened.");
+}
+
+function exitGame(){
+alert("Thanks for playing Shirokenz World!");
+}
+
 </script>
 
 </body>
 </html>
-
