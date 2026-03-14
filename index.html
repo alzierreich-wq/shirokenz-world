@@ -18,20 +18,29 @@ font-family:Arial;
 .game{
 width:1280px;
 height:720px;
-background-image:url("assets/map.png");
-background-size:cover;
-background-position:center;
-text-align:center;
+background:#0b1a2a;
+position:relative;
+overflow:hidden;
 color:white;
+text-align:center;
+}
+
+.map{
+position:absolute;
+width:100%;
+height:100%;
+opacity:0.35;
 }
 
 h1{
+position:relative;
 font-size:60px;
 margin-top:60px;
 text-shadow:3px 3px 6px black;
 }
 
 .menu{
+position:relative;
 margin-top:80px;
 }
 
@@ -58,20 +67,23 @@ background:#222;
 
 <div class="game">
 
+<!-- Peta dibuat langsung dengan SVG -->
+<svg class="map" viewBox="0 0 1000 600">
+<rect width="1000" height="600" fill="#1c3d5a"/>
+<ellipse cx="200" cy="200" rx="180" ry="120" fill="#4a7ba7"/>
+<ellipse cx="450" cy="320" rx="220" ry="150" fill="#5d8fbf"/>
+<ellipse cx="750" cy="220" rx="200" ry="130" fill="#4a7ba7"/>
+<ellipse cx="650" cy="450" rx="160" ry="100" fill="#5d8fbf"/>
+</svg>
+
 <h1>Shirokenz World</h1>
 
 <div class="menu">
-
 <button onclick="startGame()">Games</button>
-
 <button onclick="openEditor()">Editor</button>
-
 <button onclick="openSettings()">Settings</button>
-
 <button onclick="openTutorial()">Tutorial</button>
-
 <button onclick="exitGame()">Exit Game</button>
-
 </div>
 
 </div>
