@@ -1,28 +1,42 @@
 <!DOCTYPE html><html><head>
-<title>Shirokenz World</title><style>
+<title>Shirokenz World Strategy</title><style>
 
 body{
 margin:0;
-background:black;
+background:#0d0d0d;
 color:white;
 font-family:Arial;
 text-align:center;
 }
 
+/* MENU */
+
 #menu{
 position:absolute;
 width:100%;
 height:100%;
-background:black;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+background:black;
 }
+
+/* GAME SCREEN */
 
 #game{
 display:none;
 }
+
+/* TOP BAR */
+
+#topbar{
+background:#111;
+padding:10px;
+border-bottom:1px solid #333;
+}
+
+/* MAP */
 
 #gameMap{
 position:relative;
@@ -31,35 +45,61 @@ height:720px;
 margin:auto;
 background:url("map.png");
 background-size:cover;
+border:2px solid #444;
 }
+
+/* PROVINCE */
 
 .province{
 position:absolute;
-width:18px;
-height:18px;
-background:rgba(255,255,255,0.3);
+width:14px;
+height:14px;
+background:rgba(255,255,255,0.35);
 border-radius:50%;
 cursor:pointer;
 }
 
 button{
-padding:12px 25px;
+padding:10px 20px;
 margin:10px;
 font-size:16px;
 cursor:pointer;
 }
 
-</style></head><body><div id="menu"><h1>Shirokenz World Strategy</h1><button onclick="startGame()">Start Game</button>
+#log{
+height:120px;
+overflow:auto;
+background:#111;
+border-top:1px solid #333;
+padding:10px;
+font-size:14px;
+}
+
+</style></head><body><!-- MENU --><div id="menu"><h1>Shirokenz World</h1><button onclick="startGame()">Start Game</button>
+<button>Load Game</button>
 <button>Editor</button>
 <button>Settings</button>
-<button>Tutorial</button>
 
-</div><div id="game"><h2>World Map</h2><div id="gameMap"></div></div><script>
+</div><!-- GAME --><div id="game"><div id="topbar">Money: <span id="money">0</span> |
+Stability: <span id="stability">0</span> |
+Day: <span id="day">0</span>
+
+</div><div id="gameMap"></div><div id="log"></div></div><script>
+
+////////////////////////////////////////////////
+// WORLD DATA
+////////////////////////////////////////////////
 
 const WORLD={
+day:0,
 provinces:[],
-countries:[]
+countries:[],
+armies:[]
 };
+
+////////////////////////////////////////////////
+// PROVINCE
+////////////////////////////////////////////////
 
 class Province{
 
@@ -73,9 +113,21 @@ this.population=500000;
 this.economy=1000;
 this.loyalty=80;
 
+this.buildings={
+farm:0,
+trade:0,
+fort:0
+};
+
+this.owner=0;
+
 }
 
 }
+
+////////////////////////////////////////////////
+// COUNTRY
+////////////////////////////////////////////////
 
 class Country{
 
@@ -83,17 +135,54 @@ constructor(id,name){
 
 this.id=id;
 this.name=name;
-this.money=1000000;
+
+this.money=50000;
+this.stability=70;
 
 }
 
 }
+
+////////////////////////////////////////////////
+// ARMY
+////////////////////////////////////////////////
+
+class Army{
+
+constructor(id,province){
+
+this.id=id;
+this.province=province;
+
+this.infantry=1000;
+
+}
+
+}
+
+////////////////////////////////////////////////
+// LOG SYSTEM
+////////////////////////////////////////////////
+
+function log(text){
+
+let logBox=document.getElementById("log");
+
+logBox.innerHTML+=text+"<br>";
+
+logBox.scrollTop=logBox.scrollHeight;
+
+}
+
+////////////////////////////////////////////////
+// GENERATE PROVINCES
+////////////////////////////////////////////////
 
 function generateProvinces(){
 
 let map=document.getElementById("gameMap");
 
-for(let i=0;i<200;i++){
+for(let i=0;i<120;i++){
 
 let x=Math.random()*1200;
 let y=Math.random()*650;
@@ -110,11 +199,7 @@ div.style.top=y+"px";
 
 div.onclick=function(){
 
-alert(
-"Province ID: "+province.id+
-"\nPopulation: "+Math.floor(province.population)+
-"\nEconomy: "+province.economy
-);
+provinceMenu(province);
 
 };
 
@@ -124,13 +209,199 @@ map.appendChild(div);
 
 }
 
-function worldUpdate(){
+////////////////////////////////////////////////
+// PROVINCE MENU
+////////////////////////////////////////////////
+
+function provinceMenu(p){
+
+let action=prompt(
+
+"Province "+p.id+
+"\nPopulation: "+Math.floor(p.population)+
+"\nEconomy: "+p.economy+
+"\nLoyalty: "+p.loyalty+
+"\n\n1 Build Farm"+
+"\n2 Build Trade"+
+"\n3 Recruit Army"
+
+);
+
+if(action==1){
+
+p.buildings.farm++;
+
+log("Farm built in province "+p.id);
+
+}
+
+if(action==2){
+
+p.buildings.trade++;
+
+log("Trade center built in province "+p.id);
+
+}
+
+if(action==3){
+
+createArmy(p);
+
+}
+
+}
+
+////////////////////////////////////////////////
+// CREATE ARMY
+////////////////////////////////////////////////
+
+function createArmy(province){
+
+let army=new Army(WORLD.armies.length,province.id);
+
+WORLD.armies.push(army);
+
+log("Army recruited in province "+province.id);
+
+}
+
+////////////////////////////////////////////////
+// POPULATION SYSTEM
+////////////////////////////////////////////////
+
+function updatePopulation(){
 
 WORLD.provinces.forEach(p=>{
-p.population+=p.population*0.002;
+
+let growth=p.population*0.002;
+
+if(p.buildings.farm>0){
+
+growth*=1.5;
+
+}
+
+p.population+=growth;
+
 });
 
 }
+
+////////////////////////////////////////////////
+// ECONOMY SYSTEM
+////////////////////////////////////////////////
+
+function updateEconomy(){
+
+let country=WORLD.countries[0];
+
+WORLD.provinces.forEach(p=>{
+
+let income=p.economy*0.1;
+
+if(p.buildings.trade>0){
+
+income*=1.4;
+
+}
+
+country.money+=income;
+
+});
+
+}
+
+////////////////////////////////////////////////
+// LOYALTY SYSTEM
+////////////////////////////////////////////////
+
+function updateLoyalty(){
+
+WORLD.provinces.forEach(p=>{
+
+if(p.population>2000000){
+
+p.loyalty-=0.1;
+
+}
+
+if(p.loyalty<40){
+
+rebellion(p);
+
+}
+
+});
+
+}
+
+////////////////////////////////////////////////
+// REBELLION
+////////////////////////////////////////////////
+
+function rebellion(p){
+
+log("REBELLION in province "+p.id);
+
+p.loyalty=70;
+
+}
+
+////////////////////////////////////////////////
+// RANDOM EVENTS
+////////////////////////////////////////////////
+
+function randomEvent(){
+
+let r=Math.random();
+
+if(r<0.02){
+
+log("Economic inflation!");
+
+WORLD.countries[0].money*=0.9;
+
+}
+
+if(r<0.01){
+
+log("Virus outbreak!");
+
+WORLD.provinces.forEach(p=>{
+
+p.population*=0.97;
+
+});
+
+}
+
+}
+
+////////////////////////////////////////////////
+// WORLD UPDATE
+////////////////////////////////////////////////
+
+function worldUpdate(){
+
+WORLD.day++;
+
+document.getElementById("day").innerText=WORLD.day;
+
+updatePopulation();
+updateEconomy();
+updateLoyalty();
+randomEvent();
+
+let country=WORLD.countries[0];
+
+document.getElementById("money").innerText=Math.floor(country.money);
+document.getElementById("stability").innerText=country.stability;
+
+}
+
+////////////////////////////////////////////////
+// START GAME
+////////////////////////////////////////////////
 
 function startGame(){
 
@@ -139,12 +410,15 @@ document.getElementById("game").style.display="block";
 
 generateProvinces();
 
-let country=new Country(0,"Great Shirokenz Family");
+let country=new Country(0,"Great Shirokenz");
 
 WORLD.countries.push(country);
 
-setInterval(worldUpdate,2000);
+log("World simulation started");
+
+setInterval(worldUpdate,3000);
 
 }
 
-</script></body></html>
+</script></body>
+  </html>
